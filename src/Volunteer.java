@@ -44,7 +44,7 @@ public class Volunteer extends User {
                             String alamat = scanner.nextLine();
                             System.out.print("Pekerjaan: ");
                             String pekerjaan = scanner.nextLine();
-                            System.out.print("Kenapa ingin menjadi relawan di kegiatan ini? ");
+                            System.out.print("Alasan menjadi relawan di kegiatan ini? ");
                             String alasan = scanner.nextLine();
                             riwayatPartisipasi.add(selectedEvent);
                             System.out.println("✅ Berhasil mendaftar ke kegiatan: " + selectedEvent.getJudul());
