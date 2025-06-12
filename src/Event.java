@@ -64,10 +64,17 @@ public class Event {
     }
 
     public void tampilkanDetail() {
-        System.out.println("- " + judul + " | Lokasi: " + lokasi + " | Tanggal: " + tanggal);
-        System.out.println("  Deskripsi: " + deskripsi);
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf("| %-20s : %-60s |\n", "Judul", judul);
+        System.out.printf("| %-20s : %-60s |\n", "Lokasi", lokasi);
+        System.out.printf("| %-20s : %-60s |\n", "Tanggal", tanggal);
+        System.out.printf("| %-20s : %-60s |\n", "Deskripsi", deskripsi);
         if (openDonasi) {
-            System.out.println("  Kegiatan ini menerima donasi melalui: " + metodePembayaran);
+            System.out.printf("| %-20s : %-60s |\n", "Donasi", "Ya");
+            System.out.printf("| %-20s : %-60s |\n", "Metode Pembayaran", metodePembayaran);
+        } else {
+            System.out.printf("| %-20s : %-60s |\n", "Donasi", "Tidak");
         }
+        System.out.println("----------------------------------------------------------------------------------------");
     }
 }
