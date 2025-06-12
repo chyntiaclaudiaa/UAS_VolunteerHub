@@ -49,13 +49,39 @@ public class Admin extends User {
                     boolean openDonasi = inputDonasi.equals("y");
                     String metode = "";
                     if (openDonasi) {
-                        System.out.print("Metode pembayaran donasi: ");
-                        metode = scanner.nextLine();
+                        while (true) {
+                            System.out.print("Metode pembayaran (Bank/E-Wallet): ");
+                            String metodeInput = scanner.nextLine().toLowerCase();
+                            if (metodeInput.equals("bank")) {
+                                System.out.print("Nama bank (misal: BCA, Mandiri): ");
+                                String namaBank = scanner.nextLine();
+                                System.out.print("Nomor rekening: ");
+                                String norek = scanner.nextLine();
+                                System.out.print("Atas nama siapa: ");
+                                String atasNama = scanner.nextLine();
+                                metode = "Bank (" + namaBank + ") - " + norek + " a.n. " + atasNama;
+                                break;
+                            } else if (metodeInput.equals("e-wallet") || metodeInput.equals("ewallet")) {
+                                System.out.print("Nomor HP untuk e-wallet: ");
+                                String noHp = scanner.nextLine();
+                                if (noHp.matches("\\d{11,12}")) {
+                                    System.out.print("Atas nama siapa: ");
+                                    String atasNama = scanner.nextLine();
+                                    metode = "E-Wallet - " + noHp + " a.n. " + atasNama;
+                                    break;
+                                } else {
+                                    System.out.println("❌ Nomor HP tidak valid. Harus 11–12 digit angka.");
+                                }
+                            } else {
+                                System.out.println("❌ Metode tidak dikenali. Masukkan Bank atau E-Wallet.");
+                            }
+                        }
                     }
 
                     daftarKegiatan.add(new Event(judul, lokasi, tanggal, deskripsi, openDonasi, metode));
                     System.out.println("✅ Kegiatan berhasil ditambahkan!");
                     break;
+
 
                 case "2":
                     System.out.println("\n📋 Daftar Kegiatan:");
@@ -76,10 +102,19 @@ public class Admin extends User {
                         System.out.println("Belum ada kegiatan untuk diedit.");
                         break;
                     }
+
+                    System.out.println("\n📋 Daftar Kegiatan:");
+                    for (int i = 0; i < daftarKegiatan.size(); i++) {
+                        System.out.printf("Kegiatan #%d:\n", i + 1);
+                        daftarKegiatan.get(i).tampilkanDetail();
+                    }
+
                     System.out.print("Masukkan nomor kegiatan yang ingin diedit: ");
                     int idxEdit = Integer.parseInt(scanner.nextLine()) - 1;
+
                     if (idxEdit >= 0 && idxEdit < daftarKegiatan.size()) {
                         Event e = daftarKegiatan.get(idxEdit);
+                        System.out.println("Kamu bisa mengedit lebih dari satu bagian. Pilih 7 jika sudah selesai.");
                         boolean editing = true;
                         while (editing) {
                             System.out.println("\n🔧 Edit Kegiatan: " + e.getJudul());
@@ -115,23 +150,84 @@ public class Admin extends User {
                                         System.out.print("Apakah menerima donasi? (y/n): ");
                                         String input = scanner.nextLine().toLowerCase();
                                         if (input.equals("y") || input.equals("n")) {
-                                            e.setOpenDonasi(input.equals("y"));
-                                            if (e.isOpenDonasi()) {
-                                                System.out.print("Metode pembayaran: ");
-                                                e.setMetodePembayaran(scanner.nextLine());
-                                            } else {
+                                            boolean menerimaDonasi = input.equals("y");
+
+                                            // Simpan status donasi sebelumnya
+                                            boolean sebelumnya = e.isOpenDonasi();
+                                            e.setOpenDonasi(menerimaDonasi);
+
+                                            // Jika sebelumnya tidak menerima, sekarang iya → minta isi metode
+                                            if (!sebelumnya && menerimaDonasi) {
+                                                while (true) {
+                                                    System.out.print("Metode pembayaran (Bank/E-Wallet): ");
+                                                    String metodeInput = scanner.nextLine().toLowerCase();
+                                                    if (metodeInput.equals("bank")) {
+                                                        System.out.print("Nama bank (misal: BCA, Mandiri): ");
+                                                        String namaBank = scanner.nextLine();
+                                                        System.out.print("Nomor rekening: ");
+                                                        String norek = scanner.nextLine();
+                                                        System.out.print("Atas nama siapa: ");
+                                                        String atasNama = scanner.nextLine();
+                                                        e.setMetodePembayaran("Bank (" + namaBank + ") - " + norek + " a.n. " + atasNama);
+                                                        break;
+                                                    } else if (metodeInput.equals("e-wallet") || metodeInput.equals("ewallet")) {
+                                                        System.out.print("Nomor HP untuk e-wallet: ");
+                                                        String noHp = scanner.nextLine();
+                                                        if (noHp.matches("\\d{11,12}")) {
+                                                            System.out.print("Atas nama siapa: ");
+                                                            String atasNama = scanner.nextLine();
+                                                            e.setMetodePembayaran("E-Wallet - " + noHp + " a.n. " + atasNama);
+                                                            break;
+                                                        } else {
+                                                            System.out.println("❌ Nomor HP tidak valid. Harus 11–12 digit angka.");
+                                                        }
+                                                    } else {
+                                                        System.out.println("❌ Metode tidak dikenali. Masukkan Bank atau E-Wallet.");
+                                                    }
+                                                }
+                                            }
+
+                                            // Jika diubah ke tidak menerima → reset metode
+                                            if (!menerimaDonasi) {
                                                 e.setMetodePembayaran("");
                                             }
+
                                             break;
                                         } else {
                                             System.out.println("❌ Input tidak valid. Masukkan 'y' atau 'n'.");
                                         }
                                     }
                                     break;
+
                                 case "6":
                                     if (e.isOpenDonasi()) {
-                                        System.out.print("Metode pembayaran baru: ");
-                                        e.setMetodePembayaran(scanner.nextLine());
+                                        while (true) {
+                                            System.out.print("Metode pembayaran baru (Bank/E-Wallet): ");
+                                            String metodeInput = scanner.nextLine().toLowerCase();
+                                            if (metodeInput.equals("bank")) {
+                                                System.out.print("Nama bank (misal: BCA, Mandiri): ");
+                                                String namaBank = scanner.nextLine();
+                                                System.out.print("Nomor rekening: ");
+                                                String norek = scanner.nextLine();
+                                                System.out.print("Atas nama siapa: ");
+                                                String atasNama = scanner.nextLine();
+                                                e.setMetodePembayaran("Bank (" + namaBank + ") - " + norek + " a.n. " + atasNama);
+                                                break;
+                                            } else if (metodeInput.equals("e-wallet") || metodeInput.equals("ewallet")) {
+                                                System.out.print("Nomor HP untuk e-wallet: ");
+                                                String noHp = scanner.nextLine();
+                                                if (noHp.matches("\\d{11,12}")) {
+                                                    System.out.print("Atas nama siapa: ");
+                                                    String atasNama = scanner.nextLine();
+                                                    e.setMetodePembayaran("E-Wallet - " + noHp + " a.n. " + atasNama);
+                                                    break;
+                                                } else {
+                                                    System.out.println("❌ Nomor HP tidak valid. Harus 11–12 digit angka.");
+                                                }
+                                            } else {
+                                                System.out.println("❌ Metode tidak dikenali. Masukkan Bank atau E-Wallet.");
+                                            }
+                                        }
                                     } else {
                                         System.out.println("❌ Kegiatan ini tidak menerima donasi.");
                                     }
@@ -154,11 +250,25 @@ public class Admin extends User {
                         System.out.println("Belum ada kegiatan untuk dihapus.");
                         break;
                     }
+
+                    System.out.println("\n📋 Daftar Kegiatan:");
+                    for (int i = 0; i < daftarKegiatan.size(); i++) {
+                        System.out.printf("Kegiatan #%d:\n", i + 1);
+                        daftarKegiatan.get(i).tampilkanDetail();
+                    }
+
                     System.out.print("Masukkan nomor kegiatan yang ingin dihapus: ");
                     int idxDel = Integer.parseInt(scanner.nextLine()) - 1;
+
                     if (idxDel >= 0 && idxDel < daftarKegiatan.size()) {
-                        daftarKegiatan.remove(idxDel);
-                        System.out.println("✅ Kegiatan berhasil dihapus.");
+                        System.out.printf("Yakin ingin menghapus kegiatan \"%s\"? (y/n): ", daftarKegiatan.get(idxDel).getJudul());
+                        String konfirmasi = scanner.nextLine();
+                        if (konfirmasi.equalsIgnoreCase("y")) {
+                            daftarKegiatan.remove(idxDel);
+                            System.out.println("✅ Kegiatan berhasil dihapus.");
+                        } else {
+                            System.out.println("❎ Penghapusan dibatalkan.");
+                        }
                     } else {
                         System.out.println("❌ Nomor kegiatan tidak ditemukan.");
                     }

@@ -41,8 +41,45 @@ public class App {
     }
 
     private void seedSampleEvents() {
-        daftarKegiatan.add(new Event("Bakti Sosial Panti Asuhan", "Jakarta", "2025-07-01", "Mengunjungi dan membantu anak-anak di panti asuhan.", true, "Transfer Bank"));
-        daftarKegiatan.add(new Event("Pembersihan Pantai", "Bali", "2025-07-10", "Membersihkan sampah di pantai dan kampanye lingkungan.", false, ""));
+        daftarKegiatan.add(new Event(
+                "Bakti Sosial Panti Asuhan",
+                "Jakarta",
+                "2025-07-01",
+                "Mengunjungi dan membantu anak-anak di panti asuhan.",
+                true,
+                "Bank (BRI) - 1234567890 a.n. Relawan Jakarta"));
+
+        daftarKegiatan.add(new Event(
+                "Pembersihan Pantai",
+                "Bali",
+                "2025-07-10",
+                "Membersihkan sampah di pantai dan kampanye lingkungan.",
+                false,
+                ""));
+
+        daftarKegiatan.add(new Event(
+                "Penanaman Pohon Bersama",
+                "Bandung",
+                "2025-08-05",
+                "Penghijauan dengan menanam 500 bibit pohon hutan kota.",
+                true,
+                "Bank (BCA) - 9876543210 a.n. Gerakan Hijau Bandung"));
+
+        daftarKegiatan.add(new Event(
+                "Donor Darah Massal",
+                "Surabaya",
+                "2025-08-20",
+                "Bersama PMI untuk membantu ketersediaan stok darah.",
+                false,
+                ""));
+
+        daftarKegiatan.add(new Event(
+                "Kelas Edukasi Lingkungan",
+                "Yogyakarta",
+                "2025-09-12",
+                "Edukasi pada siswa mengenai pentingnya menjaga lingkungan.",
+                true,
+                "E-Wallet - 081234567890 a.n. Komunitas EduHijau"));
     }
 
     private void loginAdmin() {
