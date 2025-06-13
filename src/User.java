@@ -15,7 +15,5 @@ public class User {
         return password;
     }
 
-    public void dashboard() {
-        System.out.println("Ini dashboard umum");
-    }
+    public void dashboard() { }
 }
